@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class privateclass {
 	
-	
+	//     pfx to prublic and private cer file(icici)
 	  @GetMapping("/keys")
 	    public String generateKeysFromPfx() {
 	        try {
 	            // Path to the .pfx file and the password
-	            String pfxFilePath = "D:\\cert\\rkj_seil_capricorn.pfx";
-	            String pfxPassword = "rkjain"; // Replace with the actual password
+	            String pfxFilePath = "C:\\Users\\sa\\Downloads\\icici\\icici\\paisalo.pfx";
+	            String pfxPassword = "123456"; // Replace with the actual password
 
 	            // Load the .pfx file as a KeyStore
 	            KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -45,11 +45,28 @@ public class privateclass {
 
 	            // Retrieve the certificate and extract the public key
 	            Certificate certificate = keyStore.getCertificate(alias);
+	            
+	            
+	            if (certificate instanceof X509Certificate) {
+	                X509Certificate x509Certificate = (X509Certificate) certificate;
+	                
+	                // Save the certificate as a .cer file
+	                FileOutputStream cerOutputStream = new FileOutputStream("C:\\Users\\sa\\Downloads\\icici\\icici\\public_key_pdl_cer.cer");
+	                cerOutputStream.write(x509Certificate.getEncoded());
+	                cerOutputStream.close();
+	                
+	                System.out.println("Public Key has been saved to public_key.cer");
+	            } else {
+	                System.out.println("The certificate is not of type X.509.");
+	            }
+	            
+	            
+	            
 	            PublicKey publicKey = certificate.getPublicKey();
 
 	            // Convert public and private keys to PEM format and save to files
-	            saveKeyToPem(publicKey, "D:\\cert\\public_key_pdl.pem", "PUBLIC KEY");
-	            saveKeyToPem(privateKey, "D:\\cert\\private_key_pdl.pem", "PRIVATE KEY");
+	            saveKeyToPem(publicKey, "C:\\Users\\sa\\Downloads\\icici\\icici\\public_key_pdl.pem", "PUBLIC KEY");
+	            saveKeyToPem(privateKey, "C:\\Users\\sa\\Downloads\\icici\\icici\\private_key_pdl.pem", "PRIVATE KEY");
 
 	            return "Public and private keys have been saved successfully.";
 	        } catch (Exception e) {
@@ -81,6 +98,50 @@ public class privateclass {
 	
 	
 	
+	//pfx to public and private(rkjain)
+	
+	/*
+	 * @GetMapping("/keys") public String generateKeysFromPfx() { try { // Path to
+	 * the .pfx file and the password String pfxFilePath =
+	 * "D:\\cert\\rkj_seil_capricorn.pfx"; String pfxPassword = "rkjain"; // Replace
+	 * with the actual password
+	 * 
+	 * // Load the .pfx file as a KeyStore KeyStore keyStore =
+	 * KeyStore.getInstance("PKCS12"); FileInputStream fis = new
+	 * FileInputStream(pfxFilePath); keyStore.load(fis, pfxPassword.toCharArray());
+	 * 
+	 * // Retrieve the alias (assumes the first alias) String alias =
+	 * keyStore.aliases().nextElement();
+	 * 
+	 * // Retrieve the private key PrivateKey privateKey = (PrivateKey)
+	 * keyStore.getKey(alias, pfxPassword.toCharArray()); if (privateKey == null) {
+	 * return "Private key not found!"; }
+	 * 
+	 * // Retrieve the certificate and extract the public key Certificate
+	 * certificate = keyStore.getCertificate(alias); PublicKey publicKey =
+	 * certificate.getPublicKey();
+	 * 
+	 * // Convert public and private keys to PEM format and save to files
+	 * saveKeyToPem(publicKey, "D:\\cert\\public_key_pdl.pem", "PUBLIC KEY");
+	 * saveKeyToPem(privateKey, "D:\\cert\\private_key_pdl.pem", "PRIVATE KEY");
+	 * 
+	 * return "Public and private keys have been saved successfully."; } catch
+	 * (Exception e) { e.printStackTrace(); return "An error occurred: " +
+	 * e.getMessage(); } }
+	 * 
+	 * private void saveKeyToPem(Object key, String filePath, String keyType) throws
+	 * IOException { // Encode the key in Base64 String base64EncodedKey =
+	 * Base64.getEncoder().encodeToString( key instanceof PublicKey ? ((PublicKey)
+	 * key).getEncoded() : ((PrivateKey) key).getEncoded() );
+	 * 
+	 * // Format as PEM StringBuilder pemKey = new StringBuilder();
+	 * pemKey.append("-----BEGIN ").append(keyType).append("-----\n");
+	 * pemKey.append(base64EncodedKey);
+	 * pemKey.append("\n-----END ").append(keyType).append("-----");
+	 * 
+	 * // Write to file try (FileWriter writer = new FileWriter(filePath)) {
+	 * writer.write(pemKey.toString()); } }
+	 */
 	
 	
 	
@@ -88,15 +149,16 @@ public class privateclass {
 	
 	
 	
-	
-	
-	
-	
-	
+
 	
 	
 	//////////////////////////////////////////////////////////////////////////
 	
+	    
+	    
+	    //cer to public key and private 
+	    
+	    
 	/*
 	 * @GetMapping("/pass2") public String welcome1() throws CertificateException,
 	 * IOException {
